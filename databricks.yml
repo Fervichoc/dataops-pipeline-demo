@@ -1,0 +1,19 @@
+# This is a Databricks asset bundle definition for dataops-pipeline-demo.
+# The Databricks extension requires databricks.yml configuration file.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+
+bundle:
+  name: dataops-pipeline-demo
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-2605762996218347.7.azuredatabricks.net
+
+  ## Optionally, there could be 'staging' or 'prod' targets here.
+  #
+  # prod:
+  #   workspace:
+  #     host: https://adb-2605762996218347.7.azuredatabricks.net

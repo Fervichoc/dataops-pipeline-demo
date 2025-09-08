@@ -1,14 +1,11 @@
-# Databricks notebook source
 from pyspark.sql import SparkSession
 
-# Spark session
 spark = SparkSession.builder.getOrCreate()
 
-# Cargar CSV dummy (dataset público de Databricks)
-df = spark.read.csv("/databricks-datasets/retail-org/sales_orders/", header=True, inferSchema=True)
+account_name = "sadatapipeline"
+container = "bronze"
 
-# Mostrar esquema
-df.printSchema()
+input_path = f"wasbs://{container}@{account_name}.blob.core.windows.net/sales.csv"
 
-# Guardar en Delta Lake (bronze)
-df.write.format("delta").mode("overwrite").save("/mnt/delta/bronze/sales_orders")
+df = spark.read.csv(input_path, header=True, inferSchema=True)
+df.show(5)
