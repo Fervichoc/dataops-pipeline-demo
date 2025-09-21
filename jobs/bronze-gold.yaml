@@ -1,0 +1,20 @@
+name: "bronze-to-gold"
+tasks:
+  - task_key: "ejecutar_script1"
+    description: "Ejecutar script1.py"
+    existing_cluster_id: "0123-456789-cluster"   # ID de tu cluster
+    git_source:
+      git_url: "git@github.com:tuusuario/tu-repo.git"
+      git_branch: "main"
+      git_commit: "HEAD"
+      path: "scripts/mi_script1.py"
+    timeout_seconds: 3600
+  - task_key: "ejecutar_script2"
+    description: "Ejecutar script2.py"
+    existing_cluster_id: "0123-456789-cluster"
+    git_source:
+      git_url: "git@github.com:tuusuario/tu-repo.git"
+      git_branch: "main"
+      git_commit: "HEAD"
+      path: "scripts/mi_script2.py"
+    timeout_seconds: 3600

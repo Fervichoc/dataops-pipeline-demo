@@ -1,15 +1,21 @@
-eh_namespace = "<>.servicebus.windows.net:9093"
-eh_sasl = "org.apache.kafka.common.security.plain.PlainLoginModule required username='$ConnectionString' password='<>';"
+from pyspark.sql.types import StringType
+from pyspark.sql.functions import col
 
-df_kafka = (
+connectionString = "Endpoint=sb://<NAMESPACE>.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=<KEY>;EntityPath=<EVENTHUB_NAME>"
+
+ehConf = {
+    'eventhubs.connectionString': sc._jvm.org.apache.spark.eventhubs.EventHubsUtils.encrypt(connectionString)
+}
+
+# Lectura desde Event Hubs
+df = (
     spark.readStream
-    .format("kafka")
-    .option("kafka.bootstrap.servers", eh_namespace)
-    .option("subscribe", "eventhub")  # el nombre del Event Hub
-    .option("kafka.security.protocol", "SASL_SSL")
-    .option("kafka.sasl.mechanism", "PLAIN")
-    .option("kafka.sasl.jaas.config", eh_sasl)
+    .format("eventhubs")
+    .options(**ehConf)
     .load()
 )
 
-df_parsed = df_kafka.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+# Cuerpo del mensaje viene como binario -> convertir a string
+messages = df.select(col("body").cast(StringType()).alias("message"))
+
+display(messages)  # en Databricks puedes ver en tiempo real
